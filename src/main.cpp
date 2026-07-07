@@ -60,7 +60,7 @@ const vector<double> HYPS_B = {68.0, 80.0, 120.0, 72.0, 42.0};
 // Grid helpers ---------------------------------------------------------------
 
 /**
- * Allocate a `height` * `width` grid of doubles, initialized to `value`.
+ * Allocate a `height` * `width` grid of doubles, initialised to `value`.
  * @param height Number of rows
  * @param width Number of columns
  * @param value Initial value for each cell
@@ -186,7 +186,7 @@ void addPerlinOctave(
  * @param baseRes Base resolution of the first octave (number of lattice cells)
  * @param lacunarity Frequency multiplier for each successive octave
  * @param gain Amplitude multiplier for each successive octave
- * @return Grid of unnormalized fBm noise, roughly `[-2, 2]` with default gain
+ * @return Grid of unnormalised fBm noise, roughly `[-2, 2]` with default gain
  */
 Grid fbm(
 	int height,
@@ -263,8 +263,8 @@ Grid generateHeightmap(const GenerationOptions& opts) {
 	Grid warpY = fbm(height, width, rng, 4, opts.fbmBaseRes, opts.fbmLacunarity, opts.fbmGain);
 
 	// Resample the base through the warp offsets and apply the radial falloff
-	// in a single pass, tracking the min/max needed for the normalization
-	// below. Each axis is normalized by its own half-extent, so the falloff is
+	// in a single pass, tracking the min/max needed for the normalisation
+	// below. Each axis is normalised by its own half-extent, so the falloff is
 	// an ellipse inscribed in the rectangle.
 	double centerX = width / 2.0;
 	double centerY = height / 2.0;
@@ -310,7 +310,7 @@ Grid generateHeightmap(const GenerationOptions& opts) {
 		}
 	}
 
-	// Normalize to [0, 1] so seaLevel thresholding is meaningful
+	// Normalise to [0, 1] so seaLevel thresholding is meaningful
 	double span = hmax - hmin;
 	if (span == 0) {
 		span = 1.0; // Avoid division by zero
@@ -355,7 +355,7 @@ double interpolateRamp(
 
 /**
  * Standard elevation relief tint (green lowlands -> red peaks).
- * @param elev Normalized land elevation in `[0, 1]`
+ * @param elev Normalised land elevation in `[0, 1]`
  * @return Tuple of (R, G, B) color values in `[0, 255]`
  */
 tuple<double, double, double> hypsometricColor(double elev) {
@@ -421,7 +421,7 @@ Grid hillshade(
 /**
  * Land/sea mask (`1` = land) as a flat row-major buffer. Computed once by the
  * caller and shared, so the heightmap is thresholded only a single time.
- * @param heightmap 2D grid of normalized elevation values
+ * @param heightmap 2D grid of normalised elevation values
  * @param seaLevel Threshold for land/sea separation
  * @return Flat vector of land/sea mask values in row-major order
  */
@@ -441,7 +441,7 @@ vector<uint8_t> computeLandMask(const Grid& heightmap, double seaLevel) {
 
 /**
  * Render a heightmap to an RGB pixel buffer.
- * @param heightmap 2D grid of normalized elevation values
+ * @param heightmap 2D grid of normalised elevation values
  * @param land Flat vector of land/sea mask values in row-major order
  * @param seaLevel Threshold for land/sea separation
  * @return Flat vector of RGB pixel values in row-major order
@@ -457,13 +457,13 @@ vector<uint8_t> renderToPixels(
 	// plane.
 	Grid hshade = hillshade(heightmap, 315.0, 45.0, 120.0);
 
-	// generateHeightmap normalizes the heightmap to [0, 1], so the land
+	// generateHeightmap normalises the heightmap to [0, 1], so the land
 	// maximum is exactly 1.0 and the deepest water is exactly 0.0.
 	double landSpan = 1.0 - seaLevel;
 	if (landSpan == 0) {
 		landSpan = 1.0; // Avoid division by zero
 	}
-	// Depth normalizer for water
+	// Depth normaliser for water
 	double seaSpan = seaLevel > 0.0 ? seaLevel : 1.0;
 
 	// Pixel buffer, RGB, 3 bytes per pixel
