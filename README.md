@@ -84,12 +84,12 @@ writeBmp
 
 ### 1. Random numbers - `Rng`
 
-The **xorshift64** generator mixes the seed with the 64-bit fractional bits of
-the golden ratio (`0x9E3779B97F4A7C15`) to scatter low-entropy seeds, and
-steers away from the all-zero state (xorshift's only fixed point). `nextU64()`
-does the standard `13/7/17` shift-xor sequence. `nextDouble()` takes the top 53
-bits and scales by `2⁻⁵³` to land in `[0, 1)`, then `uniform(lo, hi)` maps that
-onto a range.
+The xorshift64 generator mixes the seed with the 64-bit fractional bits of the
+golden ratio (`0x9E3779B97F4A7C15`) to scatter low-entropy seeds, and steers
+away from the all-zero state (xorshift's only fixed point). `nextU64()` does
+the standard `13/7/17` shift-xor sequence. `nextDouble()` takes the top 53 bits
+and scales by `2⁻⁵³` to land in `[0, 1)`, then `uniform(lo, hi)` maps that onto
+a range.
 
 Because the algorithm is tiny and fully specified, generation is deterministic
 for a given seed and the order in which noise layers draw from the stream is
